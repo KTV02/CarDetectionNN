@@ -90,9 +90,11 @@ def getsizes(uri):
 
 def downloadImages(images,model,driver):
     for image in images:
+        # next 2 ifs check if image is really downloadable
         if image.get_attribute("src") is not None:
             imageInfo=getsizes(image.get_attribute("src"))
-            if len(imageInfo)>0:
+            if len(imageInfo)>1:
+                #checks if dimensions of image are larger than 300x300
                 if (imageInfo[1][0]>300) and (imageInfo[1][1]>300):
                     modelpath=downloadPath+model.replace(" ", "")
                     #creates directory if not already there
