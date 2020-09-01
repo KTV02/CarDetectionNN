@@ -378,4 +378,5 @@ main()
 #maybe instead of instant download first gather multiple arrays with links to images -> every array is one model
 #need to desperately work on efficiency
 
+
 ##SORT MODEL FILE ALPHABETICLY
