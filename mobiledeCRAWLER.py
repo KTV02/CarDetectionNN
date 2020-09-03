@@ -11,7 +11,7 @@ from pyvirtualdisplay import Display
 from requests.exceptions import ConnectionError
 #from PIL import Image
 #import PIL
-
+import random
 import logging
 from PIL import Image
 from PIL import ImageFile
@@ -77,6 +77,21 @@ def setBlacklist(urlList):
         blacklist.append(i)
         with open(projectFolder+"blacklist.txt", "a") as myfile:
             myfile.write(i)
+
+def checkBlacklist(listings):
+    global blacklist
+    for i in listings:
+        if "&pageNumber" in i:
+            i=i.split("&pageNumber")[0]
+    for i in blacklist:
+        #print("blacklist",i)
+        #print("url",listings[1])
+        if i in listings:
+             print("Listing already visited")
+             listings.remove(i)
+    setBlacklist(listings)
+    sleep(30)
+    return listings
     
 def getsizes(uri):
     # get file size *and* image size (None if not known)
@@ -217,16 +232,9 @@ def setListings(driver):
     listings=[]
     prelistings=driver.find_elements_by_xpath("//*[contains(@href, 'https://suchen.mobile.de/fahrzeuge/details.html')]")
     for i in prelistings:
-        listings.append(str(i.get_attribute("href"))+"\n")
-    global blacklist
-    for i in blacklist:
-        #print("blacklist",i)
-        #print("url",listings[1])
-        if i in listings:
-             print("Listing already visited")
-             listings.remove(i)
-    setBlacklist(listings)
-    sleep(2)
+        listings.append(str(i.get_attribute("href"))+"\n") #do i need \n???????????????????????
+
+    listings=checkBlacklist(listings)
     return listings
 
 
