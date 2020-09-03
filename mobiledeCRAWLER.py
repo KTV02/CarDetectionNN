@@ -59,6 +59,20 @@ def getModels():
         asstring=m.read()
     #print(asstring)
     models=asstring.split(",")
+
+
+
+
+def stripUrls(listings):
+    ids=[]
+    for i in listings:
+        if "?id=" in i:
+            #if id is in url cut it and save it in list ids
+            ids.append(i[51:60])
+        else:
+            listings.remove(i)
+            
+    return ids,listings
     
 
 def getBlacklist():
@@ -70,29 +84,41 @@ def getBlacklist():
             blacklist.append(i)
 
 
-def setBlacklist(urlList):
+def setBlacklist(ids):
     global blacklist
     #f=open("blacklist.txt","w")
-    for i in urlList:
+    for i in ids:
         blacklist.append(i)
         with open(projectFolder+"blacklist.txt", "a") as myfile:
+            myfile.write("\n")
             myfile.write(i)
 
-def checkBlacklist(listings):
+def checkBlacklist(prelistings):
     global blacklist
-    for i in listings:
-        if "&pageNumber" in i:
-            i=i.split("&pageNumber")[0]
+    #set ids to ids of urls and listings to urls without "special litstings without ids"
+    ids,listings=stripUrls(prelistings)
+    setBlacklist(ids)
+    print("number of listings before blacklist",len(listings))
+    #check for every listening if its a "normal" listing with id in url
     for i in blacklist:
         #print("blacklist",i)
         #print("url",listings[1])
-        if i in listings:
+        
+        #check for every id saved in blacklist if its in the list of ids
+        #if the case the listing has already been visited because ids are unique
+        if i in ids:
              print("Listing already visited")
-             listings.remove(i)
-    setBlacklist(listings)
+             print("id=",i)
+             for x in listings:
+                 if i in x:
+                     print("listings",x)
+                     listings.remove(x)
+    print("number of listings after blacklist",len(listings))
     sleep(30)
     return listings
-    
+
+
+
 def getsizes(uri):
     # get file size *and* image size (None if not known)
     file = urllib.urlopen(uri)
