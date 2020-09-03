@@ -12,20 +12,30 @@ def getBlacklist():
     return blacklist
 
 def clean(urls):
-    blacklist=[]
+    ids=[]
+    #check for every listening if its a "normal" listing with id in url
     for i in urls:
-        if "&pageNumber" in i:
-            blacklist.append(i.split("&pageNumber")[0])
-    #print(blacklist)
-    return blacklist
-
+        if "?id=" in i:
+            #if id is in url cut it and save it in list ids
+            ids.append(i[51:60])
+            ids.append(i)
+    return ids
+ 
 
 def write(blacklist):
     file=open("blacklist.txt","a")
     file.write("\n")
+    file.write("\n")
+    file.write("\n")
+    file.write("\n")
+    file.write("\n")
+    file.write("\n")
+    file.write("\n")
+    file.write("\n")
+    file.write("\n")
+    file.write("\n")
     for i in blacklist:
         file.write(i)
-        file.write("\n")
 
 
 
